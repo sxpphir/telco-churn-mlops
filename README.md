@@ -22,5 +22,9 @@ Seguir `GUIA_GIT.md`. Este ZIP no contiene `.git`, para que cada alumno iniciali
 
 Este proyecto utiliza Regresión Logística, Random Forest y SVM.
 
+<<<<<<< HEAD
 Evaluación de modelos
 Utilizaremos Accuracy, F1 y ROC-AUC
+=======
+Modelo SVM
+>>>>>>> feature/svm
