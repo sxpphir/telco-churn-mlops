@@ -3,3 +3,4 @@ __pycache__/
 *.pyc
 /models/
 .ipynb_checkpoints/
+SOLUCION_DOCENTE.md
