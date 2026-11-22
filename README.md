@@ -1,6 +1,6 @@
 # Proyecto - Introducción a MLOps: Desarrollo, Versionado y Automatización de Modelos de Machine Learning
 
-**Alumna:** Ana Michel Garcia Perez · **Materia:** Minería de Datos · **Profesor:** Gustavo Daniel Vega Magdaleno
+**Alumna:** Ana Michel García Pérez · **Materia:** Minería de Datos · **Profesor:** Gustavo Daniel Vega Magdaleno
 
 Caso de estudio: **predicción de abandono de clientes (Telco Customer Churn)**. A partir de la antigüedad,
 el cargo mensual, el cargo total, el tipo de contrato y el servicio de internet de un cliente, el modelo
