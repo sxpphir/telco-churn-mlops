@@ -1,0 +1,4 @@
+FROM python:3.11-slim
+
+# SQLAlchemy 2.1 elimino una clase que MLflow 2.22 necesita; se fija < 2.1
+RUN pip install --no-cache-dir mlflow==2.22.0 "sqlalchemy>=2.0,<2.1"

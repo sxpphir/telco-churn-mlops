@@ -1,33 +1,92 @@
-# Telco Customer Churn — práctica de Git
+# Proyecto - Introducción a MLOps: Desarrollo, Versionado y Automatización de Modelos de Machine Learning
 
-**Nota sobre datos:** `data/telco_demo.csv` es un dataset **sintético**, con columnas inspiradas en Telco Customer Churn. No es una copia de Kaggle ni contiene datos de clientes reales. Se incluye para que la práctica funcione sin descargar nada. Para las prácticas posteriores se puede sustituir por el dataset real de Kaggle, revisando nombres y esquema.
+**Alumna:** Ana Michel Garcia Perez · **Materia:** Minería de Datos · **Profesor:** Gustavo Daniel Vega Magdaleno
+
+Caso de estudio: **predicción de abandono de clientes (Telco Customer Churn)**. A partir de la antigüedad,
+el cargo mensual, el cargo total, el tipo de contrato y el servicio de internet de un cliente, el modelo
+predice si abandonará el servicio y con qué probabilidad.
+
+- Modelo Champion: **Regresión Logística** (ROC-AUC 0.70, Accuracy 0.77), comparada contra Random Forest y SVM.
+- Reporte: [`docs/Reporte_Final_MLOps.pdf`](docs/Reporte_Final_MLOps.pdf) · Anexo con todas las evidencias: [`docs/Anexo_Evidencias_MLOps.pdf`](docs/Anexo_Evidencias_MLOps.pdf)
+- Guía para la demostración: [`DEMO.md`](DEMO.md)
+
+## Estructura
+
+| Carpeta | Herramienta | Qué contiene |
+|---|---|---|
+| raíz (`src/`, `data/`, `dvc.yaml`) | Git, GitHub, DVC | Código de entrenamiento, dataset versionado con DVC (`.dvc`), pipeline `dvc.yaml` + `dvc.lock` y `metrics.json` |
+| `04_mlflow/` | MLflow | Preprocesamiento, entrenamiento de 3 modelos registrados en MLflow, Model Registry y alias `champion` |
+| `05_airflow/` | Apache Airflow | DAG `telco_training_pipeline` (validar → entrenar → seleccionar champion → reporte) con Docker Compose |
+| `06_fastapi/` | FastAPI | API `/predict`, `/health` y formulario HTML con el modelo Champion |
+| `07_docker/` | Docker | Dockerfile para empaquetar la API |
+| `08_cicd/` | GitHub Actions | Pruebas con pytest y workflow CI/CD que publica la imagen en GHCR |
+| `09_monitoring/` | Evidently AI | Detección de data drift, monitoreo de predicciones y de rendimiento con alerta |
+| `docs/` | — | Reporte PDF y anexo de evidencias |
+
+El historial de commits, ramas y Pull Requests de este repositorio corresponde a las prácticas de Git y GitHub.
+
+Repositorio adicional:
+- CI/CD con GitHub Actions (workflow en ejecución e imagen publicada): https://github.com/sxpphir/telco-churn-cicd
+- Imagen Docker publicada: `ghcr.io/sxpphir/telco-churn-cicd:latest`
 
 ## Requisitos
-- Windows con Python 3.10+ y Git instalados.
-- Visual Studio Code con terminal integrada (PowerShell).
+- Python 3.11 o superior, Git y Docker Desktop (motor Linux).
+- Cada carpeta tiene su propio `requirements.txt` y `README.md` con instrucciones.
 
-## Ejecutar
-```powershell
-py -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe -m src.train --model forest
-.\.venv\Scripts\python.exe -m src.train --model logistic
-.\.venv\Scripts\python.exe -m src.train --model svm
+## Ejecución rápida
+
+**Aplicación web (la forma más rápida, con Docker):**
+```bat
+cd 07_docker
+docker build -t telco-api:v1 .
+docker run -d --name telco-api -p 8000:8000 telco-api:v1
+```
+Abrir http://localhost:8000 (formulario) y http://localhost:8000/docs (API).
+
+**DVC (pipeline):**
+```bat
+python -m pip install -r requirements.txt dvc
+dvc repro
+dvc dag
+dvc metrics show
+```
+> El remoto de DVC del proyecto original es una carpeta local (`../../dvc_storage`). En este repositorio el
+> dataset se incluye también en `04_mlflow/data/telco.csv`; para reproducir el pipeline basta copiarlo a
+> `data/telco_demo.csv`.
+
+**MLflow:**
+```bat
+cd 04_mlflow
+python -m pip install -r requirements.txt
+mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlartifacts --host 127.0.0.1 --port 5000
+REM En otra terminal:
+python -m src.train
+python -m src.registry register --run-id <RUN_ID>
+python -m src.registry champion --version 1
+python -m src.registry load
 ```
 
-Si `py` no existe, sustituirlo por `python`. La ejecución mediante `.venv\Scripts\python.exe` evita cambiar la política de ejecución de PowerShell.
+**Airflow + MLflow:**
+```bat
+cd 05_airflow
+docker compose up -d --build
+```
+Airflow: http://localhost:8080 (admin / admin) · MLflow: http://localhost:5000
 
-## Git
-Seguir `GUIA_GIT.md`. Este ZIP no contiene `.git`, para que cada alumno inicialice su propio repositorio.
+**Pruebas (CI):**
+```bat
+cd 08_cicd
+python -m pip install -r requirements.txt
+python -m pytest -v
+```
 
-Este proyecto utiliza Regresión Logística, Random Forest y SVM.
-
-Evaluación de modelos
-Utilizaremos Accuracy, F1 y ROC-AUC
-Modelo SVM
-
-Modelo principal: SVM
-
-Explicación: La accuracy es el porcentaje de predicciones correctas sobre el total; la precision indica, de los casos que el modelo predijo como positivos, cuántos lo eran realmente; el recall mide, de todos los positivos reales, cuántos logró detectar el modelo; y el F1-score es la media armónica de precision y recall, que resume en una sola cifra el equilibrio entre ambas.
-
-Resultados del proyecto
+**Monitoreo:**
+```bat
+cd 09_monitoring
+python -m pip install -r requirements.txt
+python src/generate_report.py
+python src/prediction_monitor.py
+python src/performance_monitor.py
+```
+Abrir `reports/data_drift.html`. Los datos del periodo actual (`current.csv`) son simulados con cambios
+intencionales, generados por `src/make_datasets.py`.

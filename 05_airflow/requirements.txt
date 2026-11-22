@@ -1,0 +1,2 @@
+scikit-learn==1.6.1
+mlflow-skinny==2.22.0

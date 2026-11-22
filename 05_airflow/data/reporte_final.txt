@@ -1,0 +1,9 @@
+REPORTE FINAL - Telco Churn
+Fecha: 2026-11-22 18:12:20
+
+Modelo                  Accuracy      F1   ROC-AUC
+Logistic_Regression        0.733   0.429     0.700
+Random_Forest              0.756   0.450     0.677
+SVM_RBF                    0.756   0.500     0.662
+
+Champion: Logistic_Regression (versión 5)

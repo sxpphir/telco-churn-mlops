@@ -1,0 +1,51 @@
+name: Telco CI CD                            # Nombre del workflow
+
+on:                                          # Eventos que activan el workflow
+  push:                                      # Ejecutar cuando hay push
+    branches: [main]                         # Solo rama main
+  pull_request:                              # Ejecutar en Pull Requests
+    branches: [main]                         # Destino main
+
+permissions:                                 # Permisos del workflow
+  contents: read                             # Leer código
+  packages: write                            # Publicar paquetes GHCR
+
+jobs:                                        # Definir trabajos
+  test:                                      # Trabajo de pruebas
+    runs-on: ubuntu-latest                   # Máquina Linux temporal
+    steps:                                   # Pasos del trabajo
+      - uses: actions/checkout@v4            # Descargar repositorio
+
+      - uses: actions/setup-python@v5        # Configurar Python
+        with:
+          python-version: "3.11"             # Versión de Python
+
+      - name: Instalar dependencias          # Paso de instalación
+        run: pip install -r requirements.txt # Instalar librerías
+
+      - name: Ejecutar pytest                # Paso de validación
+        run: python -m pytest -v             # Ejecutar pruebas
+
+  docker:                                    # Trabajo de Docker
+    needs: test                              # Depender de pruebas
+    if: github.event_name == 'push'          # Publicar solo en push
+    runs-on: ubuntu-latest                   # Máquina Linux
+    steps:                                   # Pasos de construcción
+      - uses: actions/checkout@v4            # Descargar repositorio
+
+      - name: Nombre de imagen en minusculas # GHCR exige minúsculas
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
+
+      - name: Login GHCR                     # Autenticación en registro
+        uses: docker/login-action@v3         # Acción de Docker
+        with:
+          registry: ghcr.io                  # Registro de GitHub
+          username: ${{ github.actor }}      # Usuario de ejecución
+          password: ${{ secrets.GITHUB_TOKEN }} # Token automático
+
+      - name: Build and push                 # Construir y publicar
+        uses: docker/build-push-action@v6    # Acción de Docker
+        with:
+          context: .                         # Directorio de construcción
+          push: true                         # Publicar imagen
+          tags: ${{ env.IMAGE }}:latest      # Etiqueta
