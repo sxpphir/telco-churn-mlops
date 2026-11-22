@@ -1,0 +1,22 @@
+schema: '2.0'
+stages:
+  entrenar:
+    cmd: python -m src.train --model logistic
+    deps:
+    - path: data/telco_demo.csv
+      hash: md5
+      md5: 4704c8f7873a644ef5b641cd547dbe60
+      size: 11168
+    - path: src/train.py
+      hash: md5
+      md5: 44217d3976eed705c31c112677cc12f6
+      size: 2666
+    outs:
+    - path: metrics.json
+      hash: md5
+      md5: 9962dba54fbc0e19c6488a77013c056b
+      size: 90
+    - path: models/model.joblib
+      hash: md5
+      md5: 14a7a7564efd0c046c521db4086595c8
+      size: 3569

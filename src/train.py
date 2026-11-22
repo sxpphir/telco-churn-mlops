@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 import joblib
 import pandas as pd
@@ -54,6 +55,13 @@ def main():
     print(f"F1: {f1_score(y_test, pred, zero_division=0):.3f}")
     print(f"ROC-AUC: {roc_auc_score(y_test, proba):.3f}")
     print(f"Guardado en: {MODEL_PATH}")
+    metrics = {                                   # Métricas para DVC (dvc metrics show)
+        "modelo": args.model,
+        "accuracy": round(accuracy_score(y_test, pred), 4),
+        "f1": round(f1_score(y_test, pred, zero_division=0), 4),
+        "roc_auc": round(roc_auc_score(y_test, proba), 4),
+    }
+    (ROOT / "metrics.json").write_text(json.dumps(metrics, indent=2))
 
 
 if __name__ == "__main__":

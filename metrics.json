@@ -1,0 +1,6 @@
+{
+  "modelo": "logistic",
+  "accuracy": 0.7333,
+  "f1": 0.4286,
+  "roc_auc": 0.7001
+}

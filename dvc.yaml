@@ -1,0 +1,11 @@
+stages:
+  entrenar:
+    cmd: python -m src.train --model logistic
+    deps:
+      - data/telco_demo.csv
+      - src/train.py
+    outs:
+      - models/model.joblib
+    metrics:
+      - metrics.json:
+          cache: false
