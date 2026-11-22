@@ -28,3 +28,5 @@ Utilizaremos Accuracy, F1 y ROC-AUC
 =======
 Modelo SVM
 >>>>>>> feature/svm
+
+Modelo principal: Random Forest
