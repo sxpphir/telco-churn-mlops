@@ -21,3 +21,6 @@ Si `py` no existe, sustituirlo por `python`. La ejecución mediante `.venv\Scrip
 Seguir `GUIA_GIT.md`. Este ZIP no contiene `.git`, para que cada alumno inicialice su propio repositorio.
 
 Este proyecto utiliza Regresión Logística, Random Forest y SVM.
+
+Evaluación de modelos
+Utilizaremos Accuracy, F1 y ROC-AUC
