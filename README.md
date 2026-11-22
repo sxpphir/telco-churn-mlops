@@ -27,3 +27,5 @@ Utilizaremos Accuracy, F1 y ROC-AUC
 Modelo SVM
 
 Modelo principal: Random Forest
+
+Explicación: La accuracy es el porcentaje de predicciones correctas sobre el total; la precision indica, de los casos que el modelo predijo como positivos, cuántos lo eran realmente; el recall mide, de todos los positivos reales, cuántos logró detectar el modelo; y el F1-score es la media armónica de precision y recall, que resume en una sola cifra el equilibrio entre ambas.
