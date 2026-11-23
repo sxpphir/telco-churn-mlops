@@ -7,7 +7,7 @@ el cargo mensual, el cargo total, el tipo de contrato y el servicio de internet 
 predice si abandonará el servicio y con qué probabilidad.
 
 - Modelo Champion: **Regresión Logística** (ROC-AUC 0.70, Accuracy 0.77), comparada contra Random Forest y SVM.
-- Reporte: [`docs/Reporte_Final_MLOps.pdf`](docs/Reporte_Final_MLOps.pdf) · Anexo con todas las evidencias: [`docs/Anexo_Evidencias_MLOps.pdf`](docs/Anexo_Evidencias_MLOps.pdf)
+- Reporte: [`docs/Reporte_Final_MLOps.pdf`](docs/Reporte_Final_MLOps.pdf) · Versión extendida con todas las evidencias: [`docs/Reporte_Completo_Evidencias_MLOps.pdf`](docs/Reporte_Completo_Evidencias_MLOps.pdf)
 - Guía para la demostración: [`DEMO.md`](DEMO.md)
 
 ## Estructura
@@ -21,7 +21,7 @@ predice si abandonará el servicio y con qué probabilidad.
 | `07_docker/` | Docker | Dockerfile para empaquetar la API |
 | `08_cicd/` | GitHub Actions | Pruebas con pytest y workflow CI/CD que publica la imagen en GHCR |
 | `09_monitoring/` | Evidently AI | Detección de data drift, monitoreo de predicciones y de rendimiento con alerta |
-| `docs/` | — | Reporte PDF y anexo de evidencias |
+| `docs/` | — | Reporte PDF y versión extendida con todas las evidencias |
 
 El historial de commits, ramas y Pull Requests de este repositorio corresponde a las prácticas de Git y GitHub.
 
